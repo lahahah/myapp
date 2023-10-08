@@ -1,0 +1,2 @@
+"use strict";(self["webpackChunkmy_app"]=self["webpackChunkmy_app"]||[]).push([[443],{1871:function(u,n,t){t.r(n),t.d(n,{default:function(){return c}});var s=function(){var u=this;u._self._c;return u._m(0)},e=[function(){var u=this,n=u._self._c;return n("div",{staticClass:"about"},[n("h1",[u._v("user")])])}],r=t(1001),l={},a=(0,r.Z)(l,s,e,!1,null,null,null),c=a.exports}}]);
+//# sourceMappingURL=about.ede0108d.js.map
