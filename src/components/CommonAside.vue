@@ -1,6 +1,6 @@
 <template>
         <el-menu class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" :collapse="isCollapse"
-            background-color="#545c64" text-color="#fff" active-text-color="#fff" :collapse-transition="fallse">
+            background-color="#545c64" text-color="#fff" active-text-color="#fff" :collapse-transition="false">
             <h3>{{ isCollapse ? "后台" : "通用后台管理系统" }}    </h3>
             <el-menu-item @click="clickMenu(item)" v-for="item in noChildren" :key="item.name" :index="item.name">
                 <i :class="`el-icon-${item.icon}`"></i>
