@@ -10,5 +10,6 @@
     padding: 0;
     overflow: hidden;  //就是溢出隐藏的意思，滚动条就隐藏了
   }
+
  
 </style>
