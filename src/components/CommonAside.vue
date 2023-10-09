@@ -111,7 +111,7 @@ export default {
 }
 
 .el-menu {
-    height: 100vh;
+    height: 100%;
     transition: all .1s;
     border-right: none;
     h3 {
