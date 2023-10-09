@@ -61,65 +61,30 @@
     <!-- 右侧列 -->
     <el-col :span="16">
       <div class="num">
-        <el-card v-for="data in countData" :key="data.name" :body-style="{display: 'flex'}">
+        <el-card v-for="data in countData" :key="data.name" :body-style="{display: 'flex',padding: 0}">
           <i class="icon" :class="`el-icon-${data.icon}`" :style="{background: data.color}"></i>
           <div class="detail">
             <p class="price">￥{{  data.value }}</p>
             <p class="desc">{{ data.name }}</p>
           </div>
         </el-card>
+       <!--  折线图  -->
+
       </div>
     </el-col>
 
   </el-row>
 </template>
 
-<script>
-// @ is an alias to /src
 
+<script>
+import { getData } from "../api";
 
 export default {
   name: 'HomeView',
   data(){
     return{
-      tableData: [
-        {
-          name: 'oppo',
-          todayBuy: 100,
-          monthBuy: 300,
-          totalBuy: 800
-        },
-        {
-          name: 'vivo',
-          todayBuy: 100,
-          monthBuy: 300,
-          totalBuy: 800
-        },
-        {
-          name: '苹果',
-          todayBuy: 100,
-          monthBuy: 300,
-          totalBuy: 800
-        },
-        {
-          name: '小米',
-          todayBuy: 100,
-          monthBuy: 300,
-          totalBuy: 800
-        },
-        {
-          name: '三星',
-          todayBuy: 100,
-          monthBuy: 300,
-          totalBuy: 800
-        },
-        {
-          name: '魅族',
-          todayBuy: 100,
-          monthBuy: 300,
-          totalBuy: 800
-        }
-      ],
+      tableData: [],
       tableLabel: {
         name: "课程",
         todayBuy: "今日购买",
@@ -165,6 +130,13 @@ export default {
         },
       ],
     }
+  },
+  mounted(){
+    getData().then(({ data }) => {
+      const { tableData } = data.data
+      console.log(tableData)
+      this.tableData = tableData
+    })
   }
 }
 </script>
