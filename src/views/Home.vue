@@ -2,7 +2,7 @@
 <!-- 行 -->
   <el-row>
 <!-- 左侧列 -->
-    <el-col :span="8">
+    <el-col :span="8" style="padding-right: 10px;">
       <!--   头像   -->
         <el-card class="box-card">
       <!--分割线(下边框)上面-->
@@ -59,7 +59,7 @@
     </el-col>
 
     <!-- 右侧列 -->
-    <el-col :span="16">
+    <el-col :span="16" style=" padding-left: 10px">
       <div class="num">
         <el-card v-for="data in countData" :key="data.name" :body-style="{display: 'flex',padding: 0}">
           <i class="icon" :class="`el-icon-${data.icon}`" :style="{background: data.color}"></i>
@@ -68,8 +68,21 @@
             <p class="desc">{{ data.name }}</p>
           </div>
         </el-card>
-       <!--  折线图  -->
+      </div>
+      <!--  折线图  -->
+      <el-card style="height: 250px">
+      <!--  后面可以通 this.$refs 获取到当前的 dom 节点 -->
+      <!-- 必须要配置宽/高，不然会不显示       -->
+        <div ref="echarts1" style="height: 250px"></div>
+      </el-card>
+      <div class="graph">
+        <el-card style="height: 250px">
+        <!--  柱状图  -->
+          <div ref="echarts2" style="height: 250px" ></div>
+        </el-card>
+        <el-card style="height: 250px">
 
+        </el-card>
       </div>
     </el-col>
 
@@ -79,6 +92,7 @@
 
 <script>
 import { getData } from "../api";
+import * as echarts from 'echarts';  //引入 echarts
 
 export default {
   name: 'HomeView',
@@ -133,10 +147,100 @@ export default {
   },
   mounted(){
     getData().then(({ data }) => {
-      const { tableData } = data.data
-      console.log(tableData)
+      const { tableData, userData } = data.data
+      //console.log(tableData)
+      console.log(data.data)
       this.tableData = tableData
+
+      //折线图
+      // 基于准备好的dom，初始化 echarts实例
+      const echarts1 = echarts.init(this.$refs.echarts1)
+      // 指定图标的配置项和数据
+      var echarts1Option = {
+      }
+      //处理数据xAxis
+      const { orderData } = data.data  //解构出来 orderData 是一个对象
+      const xAxis = Object.keys(orderData.data[0]);  //获取所有 key 值
+      const xAxisData = { data: xAxis }
+      echarts1Option.xAxis = xAxisData
+      echarts1Option.yAxis = {}
+      echarts1Option.legend = xAxisData
+
+      echarts1Option.series = []
+      xAxis.forEach(key => {
+        echarts1Option.series.push({
+          name: key,
+          // 从 orderData.data 数组中的每个对象中提取指定键 key 对应的值，并将这些值组成一个新的数组返回
+          data: orderData.data.map(item => item[key]),
+          type: 'line'  //折线图
+        })
+      })
+      // echarts1Option.series = [{
+      //   name:
+      // }]
+      console.log(echarts1Option)
+
+      // 使用刚指定的配置项和数据显示图表。
+      echarts1.setOption(echarts1Option);
+
+    //  柱状图
+      const echarts2 = echarts.init(this.$refs.echarts2)
+      const echarts2Option = {
+        legend: {
+          // 图例文字颜色
+          textStyle: {
+            color: "#333",
+          },
+        },
+        grid: {  //横线
+          left: "20%",
+        },
+        // 提示框
+        tooltip: {
+          // 触发类型;轴触发,axis则鼠标hover到一条柱状图显示全部数据
+          trigger: "axis",
+        },
+        xAxis: {
+          type: "category", // 类目轴
+          data: userData.map(item => item.date),
+          axisLine: {
+            lineStyle: {
+              color: "#17b3a3",
+            },
+          },
+          axisLabel: {
+            interval: 0,
+            color: "#333",
+          },
+        },
+        yAxis: [
+          {
+            type: "value",
+            axisLine: {
+              lineStyle: {
+                color: "#17b3a3",
+              },
+            },
+          },
+        ],
+        color: ["#2ec7c9", "#b6a2de", "#5ab1ef", "#ffb980", "#d87a80", "#8d98b3"],
+        series: [
+          {
+            name: '新增用户',
+            data: userData.map(item => item.new),
+            type: 'bar'
+          },
+          {
+            name: '活跃用户',
+            data: userData.map(item => item.active),
+            type: 'bar'
+          }
+        ]
+      }
+      // 使用刚指定的配置项和数据显示图表。
+      echarts2.setOption(echarts2Option)
     })
+
   }
 }
 </script>
@@ -225,6 +329,14 @@ export default {
   .el-card{
     width: 32%;
     margin-bottom: 20px;
+  }
+}
+.graph{
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;  //左右贴边
+  .el-card{
+    width: 48%;
   }
 }
 </style>

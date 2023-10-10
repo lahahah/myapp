@@ -8,7 +8,7 @@
                     <common-header></common-header>
                 </el-header>
                 <el-main>
-                    Main
+
                     <!-- {{ this.$store.state.tag.isCollapse ? 'el-icon-s-unfold' : 'el-icon-s-fold' }} -->
                     <router-view /> <!-- 子路由出口-->
                 </el-main>
