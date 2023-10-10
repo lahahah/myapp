@@ -1,56 +1,56 @@
 <template>
-  <!-- 行 -->
+<!-- 行 -->
   <el-row>
-    <!-- 左侧列 -->
+<!-- 左侧列 -->
     <el-col :span="8" style="padding-right: 10px;">
       <!--   头像   -->
-      <el-card class="box-card">
-        <!--分割线(下边框)上面-->
-        <div class="user">
-          <img src="../assets/img/pic.jpg" alt=""/>
-          <div class="userinfo">
-            <p class="name">Admin</p>
-            <p class="access">超级管理员</p>
+        <el-card class="box-card">
+      <!--分割线(下边框)上面-->
+          <div class="user">
+            <img src="../assets/img/pic.jpg" alt=""/>
+            <div class="userinfo">
+              <p class="name">Admin</p>
+              <p class="access">超级管理员</p>
+            </div>
           </div>
-        </div>
-        <!--  分割线下面  -->
-        <div class="login-info">
-          <div class="info">
-            <p>上次登录时间：</p><p>2023.10.10</p>
+      <!--  分割线下面  -->
+          <div class="login-info">
+            <div class="info">
+              <p>上次登录时间：</p><p>2023.10.10</p>
+            </div>
+            <div class="info">
+              <p>上次登录地点：</p><p>上海</p>  <!-- <span></span> 就可以在一行显示 -->
+            </div>
           </div>
-          <div class="info">
-            <p>上次登录地点：</p><p>上海</p>  <!-- <span></span> 就可以在一行显示 -->
-          </div>
-        </div>
-      </el-card>
+        </el-card>
       <!-- 表格，使用循环表头  -->
       <el-card style="margin-top: 20px; height: 460px;">
-        <!--        <el-table
-                    :data="tableData"
-                    stripe
-                    style="width: 100%">
-                  <el-table-column
-                      prop="name"
-                      label="课程"
-                      >
-                  </el-table-column>
-                  <el-table-column
-                      prop="todayBuy"
-                      label="今日购买"
-                      >
-                  </el-table-column>
-                  <el-table-column
-                      prop="monthBuy"
-                      label="本月购买">
-                  </el-table-column>
-                  <el-table-column
-                      prop="totalBuy"
-                      label="总购买">
-                  </el-table-column>
-                </el-table>-->
+<!--        <el-table
+            :data="tableData"
+            stripe
+            style="width: 100%">
+          <el-table-column
+              prop="name"
+              label="课程"
+              >
+          </el-table-column>
+          <el-table-column
+              prop="todayBuy"
+              label="今日购买"
+              >
+          </el-table-column>
+          <el-table-column
+              prop="monthBuy"
+              label="本月购买">
+          </el-table-column>
+          <el-table-column
+              prop="totalBuy"
+              label="总购买">
+          </el-table-column>
+        </el-table>-->
 
         <el-table :data="tableData" stripe style="width: 100%">
-          <!--  值是以键值对格式存储  -->
+         <!--  值是以键值对格式存储  -->
           <el-table-column v-for="(value,key,index) in tableLabel" :key="index" :prop="key" :label="value">
 
           </el-table-column>
@@ -71,7 +71,7 @@
       </div>
       <!--  折线图  -->
       <el-card style="height: 250px">
-        <!--  后面可以通 this.$refs 获取到当前的 dom 节点 -->
+      <!--  后面可以通 this.$refs 获取到当前的 dom 节点 -->
         <div ref="echarts1" style="height: 250px"></div>
       </el-card>
       <div class="graph">
