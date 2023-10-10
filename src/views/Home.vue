@@ -1,56 +1,56 @@
 <template>
-<!-- 行 -->
+  <!-- 行 -->
   <el-row>
-<!-- 左侧列 -->
-    <el-col :span="8">
+    <!-- 左侧列 -->
+    <el-col :span="8" style="padding-right: 10px;">
       <!--   头像   -->
-        <el-card class="box-card">
-      <!--分割线(下边框)上面-->
-          <div class="user">
-            <img src="../assets/img/pic.jpg" alt=""/>
-            <div class="userinfo">
-              <p class="name">Admin</p>
-              <p class="access">超级管理员</p>
-            </div>
+      <el-card class="box-card">
+        <!--分割线(下边框)上面-->
+        <div class="user">
+          <img src="../assets/img/pic.jpg" alt=""/>
+          <div class="userinfo">
+            <p class="name">Admin</p>
+            <p class="access">超级管理员</p>
           </div>
-      <!--  分割线下面  -->
-          <div class="login-info">
-            <div class="info">
-              <p>上次登录时间：</p><p>2023.10.10</p>
-            </div>
-            <div class="info">
-              <p>上次登录地点：</p><p>上海</p>  <!-- <span></span> 就可以在一行显示 -->
-            </div>
+        </div>
+        <!--  分割线下面  -->
+        <div class="login-info">
+          <div class="info">
+            <p>上次登录时间：</p><p>2023.10.10</p>
           </div>
-        </el-card>
+          <div class="info">
+            <p>上次登录地点：</p><p>上海</p>  <!-- <span></span> 就可以在一行显示 -->
+          </div>
+        </div>
+      </el-card>
       <!-- 表格，使用循环表头  -->
       <el-card style="margin-top: 20px; height: 460px;">
-<!--        <el-table
-            :data="tableData"
-            stripe
-            style="width: 100%">
-          <el-table-column
-              prop="name"
-              label="课程"
-              >
-          </el-table-column>
-          <el-table-column
-              prop="todayBuy"
-              label="今日购买"
-              >
-          </el-table-column>
-          <el-table-column
-              prop="monthBuy"
-              label="本月购买">
-          </el-table-column>
-          <el-table-column
-              prop="totalBuy"
-              label="总购买">
-          </el-table-column>
-        </el-table>-->
+        <!--        <el-table
+                    :data="tableData"
+                    stripe
+                    style="width: 100%">
+                  <el-table-column
+                      prop="name"
+                      label="课程"
+                      >
+                  </el-table-column>
+                  <el-table-column
+                      prop="todayBuy"
+                      label="今日购买"
+                      >
+                  </el-table-column>
+                  <el-table-column
+                      prop="monthBuy"
+                      label="本月购买">
+                  </el-table-column>
+                  <el-table-column
+                      prop="totalBuy"
+                      label="总购买">
+                  </el-table-column>
+                </el-table>-->
 
         <el-table :data="tableData" stripe style="width: 100%">
-         <!--  值是以键值对格式存储  -->
+          <!--  值是以键值对格式存储  -->
           <el-table-column v-for="(value,key,index) in tableLabel" :key="index" :prop="key" :label="value">
 
           </el-table-column>
@@ -59,7 +59,7 @@
     </el-col>
 
     <!-- 右侧列 -->
-    <el-col :span="16">
+    <el-col :span="16" style=" padding-left: 10px">
       <div class="num">
         <el-card v-for="data in countData" :key="data.name" :body-style="{display: 'flex',padding: 0}">
           <i class="icon" :class="`el-icon-${data.icon}`" :style="{background: data.color}"></i>
@@ -68,8 +68,19 @@
             <p class="desc">{{ data.name }}</p>
           </div>
         </el-card>
-       <!--  折线图  -->
+      </div>
+      <!--  折线图  -->
+      <el-card style="height: 250px">
+        <!--  后面可以通 this.$refs 获取到当前的 dom 节点 -->
+        <div ref="echarts1" style="height: 250px"></div>
+      </el-card>
+      <div class="graph">
+        <el-card style="height: 250px">
 
+        </el-card>
+        <el-card style="height: 250px">
+
+        </el-card>
       </div>
     </el-col>
 
@@ -79,6 +90,7 @@
 
 <script>
 import { getData } from "../api";
+import * as echarts from 'echarts';  //引入 echarts
 
 export default {
   name: 'HomeView',
@@ -134,9 +146,41 @@ export default {
   mounted(){
     getData().then(({ data }) => {
       const { tableData } = data.data
-      console.log(tableData)
+      //console.log(tableData)
+      console.log(data.data)
       this.tableData = tableData
+
+      // 基于准备好的dom，初始化 echarts实例
+      const echarts1 = echarts.init(this.$refs.echarts1)
+      // 指定图标的配置项和数据
+      var echarts1Option = {
+      }
+      //处理数据xAxis
+      const { orderData } = data.data  //解构出来 orderData 是一个对象
+      const xAxis = Object.keys(orderData.data[0]);  //获取所有 key 值
+      const xAxisData = { data: xAxis }
+      echarts1Option.xAxis = xAxisData
+      echarts1Option.yAxis = {}
+      echarts1Option.legend = xAxisData
+
+      echarts1Option.series = []
+      xAxis.forEach(key => {
+        echarts1Option.series.push({
+          name: key,
+          // 从 orderData.data 数组中的每个对象中提取指定键 key 对应的值，并将这些值组成一个新的数组返回
+          data: orderData.data.map(item => item[key]),
+          type: 'line'  //折线图
+        })
+      })
+      // echarts1Option.series = [{
+      //   name:
+      // }]
+      console.log(echarts1Option)
+
+      // 使用刚指定的配置项和数据显示图表。
+      echarts1.setOption(echarts1Option);
     })
+
   }
 }
 </script>
@@ -225,6 +269,14 @@ export default {
   .el-card{
     width: 32%;
     margin-bottom: 20px;
+  }
+}
+.graph{
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;  //左右贴边
+  .el-card{
+    width: 48%;
   }
 }
 </style>
