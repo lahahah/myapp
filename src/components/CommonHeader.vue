@@ -3,9 +3,11 @@
         <div class="l-content">
             <i :class="collapseIcon" @click="handleCollapse" style="font-size: 30px; color:lightblue"></i>
             <!-- 面包屑 -->
-            <el-breadcrumb>
-                <el-breadcrumb-item :to="{ path: '/' }" class="text">首页</el-breadcrumb-item>
-            </el-breadcrumb>
+          <el-breadcrumb separator="/" style="line-height: 25px; margin-left: 20px">
+            <el-breadcrumb-item  class="myColor" v-for="item in tags" :key="item.path" :to="{ path: item.path }">
+              {{ item.label }}
+            </el-breadcrumb-item>
+          </el-breadcrumb>
 
             <!-- <span >首页</span> -->
         </div>
@@ -28,6 +30,7 @@
 
 <script>
 import '@/assets/css/iconfont/iconfont.css'  //引入图标
+import { mapState } from 'vuex'
 export default {
     data() {
         return {
@@ -43,7 +46,13 @@ export default {
         handleFullScreen() {  //全屏
             document.documentElement.requestFullscreen()
         }
-    }
+    },
+    computed:{
+      ...mapState({
+        tags: state => state.tag.tabsList,  //注意单词的拼写，不要前后不一致，不然得不到信息的，重点！！！
+      })
+      // tags是别名
+    },
 }
 </script>
 
@@ -71,9 +80,9 @@ export default {
     }
 }
 
-::v-deep .el-breadcrumb__item:last-child .el-breadcrumb__inner {
+/*::v-deep .el-breadcrumb__item:last-child .el-breadcrumb__inner {
     line-height: 30px;
-}
+}*/
 
 .r-content {
     .user {
@@ -87,5 +96,10 @@ export default {
 .el-icon-quanping {
     color: #fff;
     font-size: 25px
+}
+
+//重写面包屑的字体颜色
+.myColor /deep/ .el-breadcrumb__inner {
+  color: #fff ;
 }
 </style>

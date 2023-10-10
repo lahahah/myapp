@@ -23,6 +23,7 @@
 </template>
 
 <script>
+
 export default {
     data() {
         return {
@@ -80,11 +81,12 @@ export default {
         handleClose(key, keyPath) {
             console.log(key, keyPath);
         },
-        clickMenu(item){
+        clickMenu(item){  //item 就是点击的每一个页面路由数据
             console.log(item)
             //当页面的路由与跳转的路由不一致时才允许跳转
             if(this.$route.path !== item.path && !(this.$route.path === '/home' && (item.path === '/')))
-                this.$router.push(item.path);
+            {   this.$router.push(item.path);}
+            this.$store.commit('selectMenu',item)
         }
     },
     computed: {
