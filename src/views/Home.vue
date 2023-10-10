@@ -72,11 +72,13 @@
       <!--  折线图  -->
       <el-card style="height: 250px">
       <!--  后面可以通 this.$refs 获取到当前的 dom 节点 -->
+      <!-- 必须要配置宽/高，不然会不显示       -->
         <div ref="echarts1" style="height: 250px"></div>
       </el-card>
       <div class="graph">
         <el-card style="height: 250px">
-
+        <!--  柱状图  -->
+          <div ref="echarts2" style="height: 250px" ></div>
         </el-card>
         <el-card style="height: 250px">
 
@@ -145,11 +147,12 @@ export default {
   },
   mounted(){
     getData().then(({ data }) => {
-      const { tableData } = data.data
+      const { tableData, userData } = data.data
       //console.log(tableData)
       console.log(data.data)
       this.tableData = tableData
 
+      //折线图
       // 基于准备好的dom，初始化 echarts实例
       const echarts1 = echarts.init(this.$refs.echarts1)
       // 指定图标的配置项和数据
@@ -179,6 +182,63 @@ export default {
 
       // 使用刚指定的配置项和数据显示图表。
       echarts1.setOption(echarts1Option);
+
+    //  柱状图
+      const echarts2 = echarts.init(this.$refs.echarts2)
+      const echarts2Option = {
+        legend: {
+          // 图例文字颜色
+          textStyle: {
+            color: "#333",
+          },
+        },
+        grid: {  //横线
+          left: "20%",
+        },
+        // 提示框
+        tooltip: {
+          // 触发类型;轴触发,axis则鼠标hover到一条柱状图显示全部数据
+          trigger: "axis",
+        },
+        xAxis: {
+          type: "category", // 类目轴
+          data: userData.map(item => item.date),
+          axisLine: {
+            lineStyle: {
+              color: "#17b3a3",
+            },
+          },
+          axisLabel: {
+            interval: 0,
+            color: "#333",
+          },
+        },
+        yAxis: [
+          {
+            type: "value",
+            axisLine: {
+              lineStyle: {
+                color: "#17b3a3",
+              },
+            },
+          },
+        ],
+        color: ["#2ec7c9", "#b6a2de", "#5ab1ef", "#ffb980", "#d87a80", "#8d98b3"],
+        series: [
+          {
+            name: '新增用户',
+            data: userData.map(item => item.new),
+            type: 'bar'
+          },
+          {
+            name: '活跃用户',
+            data: userData.map(item => item.active),
+            type: 'bar'
+          }
+        ]
+      }
+      // 使用刚指定的配置项和数据显示图表。
+      echarts2.setOption(echarts2Option)
     })
 
   }
