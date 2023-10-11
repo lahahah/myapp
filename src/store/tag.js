@@ -2,7 +2,7 @@ export default{
     namespace:true,  //使用命名空间
     state:{
         isCollapse: false,  //控制菜单的展开还是收起
-        tabsList: [
+        tabsList: [  //首页是默认存在的
             {
                 path: '/',
                 name: 'home',

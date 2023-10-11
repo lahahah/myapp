@@ -3,9 +3,11 @@
         <div class="l-content">
             <i :class="collapseIcon" @click="handleCollapse" style="font-size: 30px; color:lightblue"></i>
             <!-- 面包屑 -->
-          <el-breadcrumb separator="/" style="line-height: 25px; margin-left: 20px">
-            <el-breadcrumb-item  class="myColor" v-for="item in tags" :key="item.path" :to="{ path: item.path }">
-              {{ item.label }}
+          <el-breadcrumb separator="/" >
+            <el-breadcrumb-item v-for="item in tags" :key="item.path">
+              <router-link :to="item.path">
+                {{ item.label }}
+              </router-link>
             </el-breadcrumb-item>
           </el-breadcrumb>
 
@@ -64,42 +66,61 @@ export default {
     justify-content: space-between; //主轴上两端显示
     align-items: center; //纵轴上垂直居中
     padding: 0 20px;
-}
+    .text {
+      font-size: 14px;
+      margin-left: 10px;
+      color: #fff;
+    }
 
-.l-content {
+    .r-content {
+      .user {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        margin-left: 20px;
+      }
+      .el-icon-quanping {
+        color: #fff;
+        font-size: 25px
+      }
+    }
+
+  .l-content {
     display: flex;
-}
+    align-items: center;
+    .el-breadcrumb {
+      margin-left: 20px;
+      /deep/ .el-breadcrumb__item { //样式穿刺
+        .el-breadcrumb__inner {
+          a{
+            font-weight: normal;
+            color: #666;
 
-.text {
-    font-size: 20px;
-    margin-left: 10px;
-    color: #fff;
-
-    :hover {
-        color: #fff !important;
+          }
+        }
+        &:last-child{   // 也就是选中哪个哪个就是 白色（最后一个显示）
+          .el-breadcrumb__inner{
+            a{
+              color: #fff;
+            }
+          }
+        }
+      }
     }
 }
+
+
+
+}
+
+
 
 /*::v-deep .el-breadcrumb__item:last-child .el-breadcrumb__inner {
     line-height: 30px;
 }*/
 
-.r-content {
-    .user {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        margin-left: 20px;
-    }
-}
 
-.el-icon-quanping {
-    color: #fff;
-    font-size: 25px
-}
 
-//重写面包屑的字体颜色
-.myColor /deep/ .el-breadcrumb__inner {
-  color: #fff ;
-}
+
+
 </style>
