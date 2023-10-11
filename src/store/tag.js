@@ -27,6 +27,11 @@ export default{
                     state.tabsList.push(val)
                 }
             }
+        },
+        closeTags(state,item){
+            state.tabsList.splice(state.tabsList.indexOf(item),1);
+            // const index = state.tabsList.findIndex(val => val.name === item.name)
+            // state.tabsList.splice(index,1)
         }
     }
 }

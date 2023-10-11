@@ -7,6 +7,7 @@
                 <el-header>
                     <common-header></common-header>
                 </el-header>
+                <common-tag></common-tag>
                 <el-main>
 
                     <!-- {{ this.$store.state.tag.isCollapse ? 'el-icon-s-unfold' : 'el-icon-s-fold' }} -->
@@ -22,9 +23,10 @@
 <script>
 import CommonAside from '@/components/CommonAside.vue'
 import CommonHeader from '@/components/CommonHeader.vue'
+import CommonTag from "@/components/CommonTag";
 
 export default {
-  components: { CommonAside, CommonHeader },
+  components: {CommonTag, CommonAside, CommonHeader },
     name: 'Main',
     data(){
         return{
