@@ -18,7 +18,7 @@ function param2Obj (url) {
 
 let List = []
 const count = 200
-
+/* 随机生成数据 */
 for (let i = 0; i < count; i++) {
     List.push(
         Mock.mock({
