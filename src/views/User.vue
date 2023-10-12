@@ -16,8 +16,8 @@
 
         <el-form-item label="性别" prop="sex">
           <el-select v-model="form.sex" placeholder="请输入性别">
-            <el-option label="男" value="1"></el-option>
-            <el-option label="女" value="0"></el-option>
+            <el-option label="男"  :value="1"></el-option>
+            <el-option label="女"  :value="0"></el-option>
           </el-select>
         </el-form-item>
 
@@ -51,7 +51,8 @@
       <el-table
           :data="tableData"
           style="width: 100%"
-           >
+          stripe
+          >
 <!--        <el-table-column v-for="(value,key,index) in tableLabel" :key="index" :prop="key" :label="value">
 
         </el-table-column>-->
@@ -84,6 +85,20 @@
             prop="addr"
             label="地址">
         </el-table-column>
+
+        <el-table-column label="操作">
+          <template slot-scope="scope">
+            <el-button
+                size="mini"
+                type="important"
+                @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+            <el-button
+                size="mini"
+                type="danger"
+                @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+          </template>
+        </el-table-column>
+
       </el-table>
       <!-- 分页 -->
     </div>
@@ -140,14 +155,23 @@ export default {
     },
     cancel() {
       this.handleClose();
+    },
+    handleEdit(index, row) {
+      console.log(index, row);
+    },
+    handleDelete(index, row) {
+      console.log(index, row);
+    },
+    handelUser(){  //公用方法
+      getUser().then(({data}) => {
+        console.log(data,'data')
+        this.tableData = data.list
+        // this.tableData = data.list.filter(item => item.sex=item.sex === 1 ? '男' : '女')
+      } )
     }
   },
   mounted() {
-    getUser().then(({data}) => {
-      console.log(data,'data')
-      this.tableData = data.list
-     // this.tableData = data.list.filter(item => item.sex=item.sex === 1 ? '男' : '女')
-    } )
+    this.handelUser()
   }
 }
 </script>
