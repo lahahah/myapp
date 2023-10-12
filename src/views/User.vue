@@ -1,7 +1,7 @@
 <template>
   <div class="manage">
     <!-- 对话框:点击新增或编辑才会弹出表单 -->
-    <el-dialog title="提示" :visible.sync="dialogVisible" width="50%">
+    <el-dialog :before-close="handleClose" title="提示" :visible.sync="dialogVisible" width="50%">
       <!-- 这里放Form表单的代码 -->
       <!-- 表单Form -->
       <el-form ref="form" :inline="true" :model="form" :rules="rules" label-width="80px">  <!-- rules 是表单验证 -->
@@ -34,7 +34,7 @@
       </el-form>
 
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button @click="cancel()">取 消</el-button>
         <el-button type="primary" @click="submit">确 定</el-button>
       </div>
     </el-dialog>
@@ -48,18 +48,56 @@
     </div>
     <div class="common-table">
       <!-- 用户数据Table -->
+      <el-table
+          :data="tableData"
+          style="width: 100%"
+           >
+<!--        <el-table-column v-for="(value,key,index) in tableLabel" :key="index" :prop="key" :label="value">
 
+        </el-table-column>-->
+        <el-table-column
+            prop="name"
+            label="姓名"
+            >
+        </el-table-column>
+        <el-table-column
+            prop="sex"
+            label="性别">
+          <template slot-scope="scope">
+        <!--  scope相当于一行的数据, scope.row相当于当前行的数据对象          -->
+            <span style="margin-left: 10px">{{ scope.row.sex == 1 ? '男' : '女' }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+            prop="age"
+            label="年龄">
+        </el-table-column>
+        <el-table-column
+            prop="birth"
+            label="出生日期">
+        </el-table-column>
+        <el-table-column
+            prop="addr"
+            label="地址">
+        </el-table-column>
+        <el-table-column
+            prop="addr"
+            label="地址">
+        </el-table-column>
+      </el-table>
       <!-- 分页 -->
     </div>
   </div>
 </template>
 
 <script>
+import { getUser } from "@/api";
+
 export default {
   data() {
     return {
       dialogVisible: false,
-      form:{
+      form: {
         name: '',
         age: '',
         sex: '',
@@ -67,23 +105,49 @@ export default {
         addr: ''
       },
       rules: {
-        name: [{ required: true, message: '请输入名称', trigger: 'blur' }],
-        age: [{ required: true, message: '请输入年龄', trigger: 'blur' }],
-        sex: [{ required: true, message: '请输入性别', trigger: 'blur' }],
-        birth: [{ required: true, message: '请输入日期', trigger: 'blur' }],
-        addr: [{ required: true, message: '请输入地址', trigger: 'blur' }],
-      }
-
+        name: [{required: true, message: '请输入名称', trigger: 'blur'}, {pattern: /^[a-z]+$/, message: '只能输入字母!'}],
+        age: [{required: true, message: '请输入年龄', trigger: 'blur'}],
+        sex: [{required: true, message: '请输入性别', trigger: 'blur'}],
+        birth: [{required: true, message: '请输入日期', trigger: 'blur'}],
+        addr: [{required: true, message: '请输入地址', trigger: 'blur'}],
+      },
+      tableData: [],
+      tableLabel:
+        {
+          name: '姓名',
+          sex: '性别',
+          age: '年龄',
+          birth: '出生日期',
+          addr: '地址'
+        }
     };
   },
-  methods:{
+  methods: {
     //提交用户表单
-    submit(){
+    submit() {
       this.$refs.form.validate((valid) => {
-        console.log(valid,'valid')
-        //this.$refs.form.resetFields();    //清楚表单内容
+        console.log(valid, 'valid')
+        //this.$refs.form.resetFields();    //清除表单内容
+        if (valid) {
+          this.dialogVisible = false;
+          this.$refs.form.resetFields();    //清除表单内容
+        }
       })
+    },
+    handleClose() {
+      this.$refs.form.resetFields();    //清除表单内容
+      this.dialogVisible = false;
+    },
+    cancel() {
+      this.handleClose();
     }
+  },
+  mounted() {
+    getUser().then(({data}) => {
+      console.log(data,'data')
+      this.tableData = data.list
+     // this.tableData = data.list.filter(item => item.sex=item.sex === 1 ? '男' : '女')
+    } )
   }
 }
 </script>
