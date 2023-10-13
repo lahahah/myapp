@@ -40,10 +40,18 @@
     </el-dialog>
 
     <div class="manage-header">
-      <!-- 新增按钮 -->
-      <el-button @click="handleAdd()" type="primary">+ 新增</el-button>
-
       <!-- 搜索框 -->
+      <!-- inline属性可以让表单域变成行内的表单域   -->
+      <el-form :model="searchForm" :inline="true">
+        <el-form-item>
+          <el-input v-model="searchForm.name" placeholder="请输入名称" ></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="search">查询</el-button>
+          <!-- 新增按钮 -->
+          <el-button @click="handleAdd()" type="primary">新增</el-button>
+        </el-form-item>
+      </el-form>
 
     </div>
     <div class="common-table" style="height: 100%">
@@ -149,6 +157,9 @@ export default {
       pageData:{
         page: 1, //当前所在页
         limit: 50 //默认显示50条
+      },
+      searchForm: { //搜索的数据值
+        name: ''
       }
     };
   },
@@ -210,8 +221,8 @@ export default {
       this.modelType = 0
       this.dialogVisible = true
     },
-    handelUser(){  //公用方法
-      getUser({params: this.pageData}).then(({data}) => {
+    handelUser(){  //公用方法，获取页面数据
+      getUser({params: { ...this.pageData,...this.searchForm } }).then(({data}) => {
         console.log(data,'data')
         this.tableData = data.list
         // this.tableData = data.list.filter(item => item.sex=item.sex === 1 ? '男' : '女')
@@ -227,6 +238,9 @@ export default {
       console.log(`每页 ${val} 条`);
       this.pageData.limit = val
       this.handelUser()  //重新加载页面
+    },
+    search(){
+      this.handelUser()
     }
   },
   mounted() {
@@ -238,9 +252,17 @@ export default {
 <style lang="less" scoped>
 .manage{
   height: 90%;
+  .manage-header{
+    display: flex;
+    align-items: center;
+   /deep/ .el-input{  // 因为用了 scoped 属性，需要穿透才行
+      .el-input__inner{
+        width: 300px;
+      }
+    }
+  }
   .common-table{
     position: relative;
-
     .pager{
       position: absolute;
       bottom: 0;

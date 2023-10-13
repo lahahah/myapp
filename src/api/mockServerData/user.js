@@ -46,7 +46,11 @@ export default {
             if (name && user.name.indexOf(name) === -1 && user.addr.indexOf(name) === -1) return false
             return true
         })
-        const pageList = mockList.filter((item, index) => index < limit * page && index >= limit * (page - 1))
+        // index 表示当前元素在数组中的索引
+        const pageLis = mockList.filter((item, index) => index < limit * page && index >= limit * (page - 1))
+        const pageList = pageLis.filter((item,index) => {  //可以模糊查询
+            return (item.name.includes(name))
+        })
         return {
             code: 20000,
             count: mockList.length,
