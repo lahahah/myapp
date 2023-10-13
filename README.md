@@ -1,26 +1,5 @@
-# my-app
+### 登录名： admin
+### 密 码 ： admin
 
-## Project setup
-```
-npm install
-```
-
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
-
-这里是分支哦
+### 登录名： xiaoxiao
+### 密 码 ： xiaoxiao
