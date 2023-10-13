@@ -8,7 +8,7 @@ Mock.mock('/api/home/getData',homeApi.getStatisticalData)
 
 
 // 用户管理:增删查改
-Mock.mock('/api/user/getUser',user.getUserList)
+Mock.mock(/\/api\/user\/getUser/,user.getUserList)   //正则的写法(两种写法)
 Mock.mock('/api/user/add','post',user.createUser)
 Mock.mock('/api/user/edit','post',user.updateUser)
 Mock.mock('/api/user/del','post',user.deleteUser)

@@ -46,9 +46,10 @@
       <!-- 搜索框 -->
 
     </div>
-    <div class="common-table">
+    <div class="common-table" style="height: 100%">
       <!-- 用户数据Table -->
       <el-table
+          height="90%"
           :data="tableData"
           style="width: 100%"
           stripe
@@ -98,6 +99,17 @@
 
       </el-table>
       <!-- 分页 -->
+      <div class="pager">
+        <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="pageData.page"
+            :page-sizes="[50, 100, 150, 200]"
+            :page-size="pageData.limit"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="total">
+        </el-pagination>
+      </div>
     </div>
   </div>
 </template>
@@ -132,7 +144,12 @@ export default {
           birth: '出生日期',
           addr: '地址'
         },
-      modelType: 0  //0不是新增的弹窗，1表示编辑
+      modelType: 0,  //0不是新增的弹窗，1表示编辑
+      total: 0 ,//总条数，默认为0
+      pageData:{
+        page: 1, //当前所在页
+        limit: 50 //默认显示50条
+      }
     };
   },
   methods: {
@@ -194,11 +211,22 @@ export default {
       this.dialogVisible = true
     },
     handelUser(){  //公用方法
-      getUser().then(({data}) => {
+      getUser({params: this.pageData}).then(({data}) => {
         console.log(data,'data')
         this.tableData = data.list
         // this.tableData = data.list.filter(item => item.sex=item.sex === 1 ? '男' : '女')
+        this.total = data.count || 0
       } )
+    },
+    handleCurrentChange(val){  //页码切换
+      console.log(val,'val')
+      this.pageData.page = val  //改变当前所在页面
+      this.handelUser()  //重新加载页面
+    },
+    handleSizeChange(val){ //每页条数切换
+      console.log(`每页 ${val} 条`);
+      this.pageData.limit = val
+      this.handelUser()  //重新加载页面
     }
   },
   mounted() {
@@ -206,3 +234,19 @@ export default {
   }
 }
 </script>
+
+<style lang="less" scoped>
+.manage{
+  height: 90%;
+  .common-table{
+    position: relative;
+
+    .pager{
+      position: absolute;
+      bottom: 0;
+      right: 20px;
+    }
+  }
+}
+
+</style>
