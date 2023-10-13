@@ -10,11 +10,11 @@ const routes = [
     path: '/',
     name: 'main',
     component: Main,
-    redirect: '/home',
+    redirect: '/home',  //重定向
     children:[
-      {
+      /*{
         path: 'user',name: 'user',    
-        component: () => import(/* webpackChunkName: "about" */ '../views/User.vue')
+        component: () => import(/!* webpackChunkName: "about" *!/ '../views/User.vue')
       },
       {
         path: 'home',name: 'home',    
@@ -31,7 +31,7 @@ const routes = [
       {
         path: 'page2',name: 'page2',    
         component: () => import('../views/PageTwo.vue')
-      }
+      }*/
     ]
   },
   {

@@ -54,6 +54,8 @@ export default {
             console.log('登出')
             //清除 cookie 中的 token
             Cookie.remove('token')
+            //清除 cookie 中的 menu
+            Cookie.remove('menu')
             //跳转到登录页面
             this.$router.push({name:'login'})
           }

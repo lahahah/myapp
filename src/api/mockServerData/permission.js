@@ -68,8 +68,8 @@ export default {
                             url: 'Home.vue'
                         },
                         {
-                            path: '/video',
-                            name: 'video',
+                            path: '/mall',
+                            name: 'mall',
                             label: '商品管理',
                             icon: 'video-play',
                             url: 'Mall.vue'

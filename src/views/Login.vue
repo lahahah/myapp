@@ -4,16 +4,16 @@
     <!-- h3要放在里面:只能有一个根,且title也是表单的一部分 -->
     <h3 class="login_title">用户登录</h3>
     <!-- prop对应rules里的键 -->
-    <el-form-item label="用户名" prop="username">
+    <el-form-item label="用户名" prop="username" >
       <el-input  v-model="login.username" autocomplete="off"></el-input>
     </el-form-item>
 
     <el-form-item label="密码" prop="password">
-      <el-input type="password" v-model="login.password" autocomplete="off"></el-input>
+      <el-input type="password" v-model="login.password" autocomplete="off" ></el-input>
     </el-form-item>
 
     <el-form-item>
-      <el-button type="primary" @click="submit">登录</el-button>
+      <el-button type="primary" @click="submit" >登录</el-button>
     </el-form-item>
   </el-form>
   </div>
@@ -54,6 +54,10 @@ export default {
               if(data.code === 20000){
                 // token 信息存 cookie ，用于不同页面之间的通信
                 Cookie.set('token',data.data.token)
+                //获取菜单的数据存入 store 中
+                //
+                this.$store.commit('setMenu',data.data.menu)
+                this.$store.commit('addMenu',this.$router)
                 // 跳转到首页
                 this.$router.push('/home')
               }else{
