@@ -23,7 +23,7 @@
 
         <el-form-item label="出生日期">
           <el-form-item prop="birth">
-            <el-date-picker type="date" placeholder="请选择日期" v-model="form.birth">
+            <el-date-picker type="date" placeholder="请选择日期" v-model="form.birth" value-format="yyyy-MM-DD">
             </el-date-picker>
           </el-form-item>
         </el-form-item>
@@ -41,7 +41,7 @@
 
     <div class="manage-header">
       <!-- 新增按钮 -->
-      <el-button @click="dialogVisible = true" type="primary">+ 新增</el-button>
+      <el-button @click="handleAdd()" type="primary">+ 新增</el-button>
 
       <!-- 搜索框 -->
 
@@ -75,7 +75,7 @@
         </el-table-column>
         <el-table-column
             prop="birth"
-            label="出生日期">
+            label="出生日期" >
         </el-table-column>
         <el-table-column
             prop="addr"
@@ -87,12 +87,12 @@
           <template slot-scope="scope">
             <el-button
                 size="mini"
-                type="important"
-                @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                type="primary"
+                @click="handleEdit(scope.row)">编辑</el-button>
             <el-button
                 size="mini"
                 type="danger"
-                @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                @click="handleDelete(scope.row)">删除</el-button>
           </template>
         </el-table-column>
 
@@ -103,7 +103,7 @@
 </template>
 
 <script>
-import { getUser } from "@/api";
+import { getUser,addUser,editUser,delUser } from "@/api";
 
 export default {
   data() {
@@ -117,7 +117,7 @@ export default {
         addr: ''
       },
       rules: {
-        name: [{required: true, message: '请输入名称', trigger: 'blur'}, {pattern: /^[a-z]+$/, message: '只能输入字母!'}],
+        name: [{required: true, message: '请输入名称', trigger: 'blur'}, {pattern: /^[a-zA-Z\u4e00-\u9fa5]+$/, message: '只能输入中文或字母!'}],
         age: [{required: true, message: '请输入年龄', trigger: 'blur'}],
         sex: [{required: true, message: '请输入性别', trigger: 'blur'}],
         birth: [{required: true, message: '请输入日期', trigger: 'blur'}],
@@ -131,16 +131,26 @@ export default {
           age: '年龄',
           birth: '出生日期',
           addr: '地址'
-        }
+        },
+      modelType: 0  //0不是新增的弹窗，1表示编辑
     };
   },
   methods: {
-    //提交用户表单
+    //提交用户表单(确定)   ====>  新增和编辑通用一个dialog表单
     submit() {
       this.$refs.form.validate((valid) => {
         console.log(valid, 'valid')
         //this.$refs.form.resetFields();    //清除表单内容
         if (valid) {
+          if(this.modelType === 0){
+            addUser(this.form).then(() => {
+              this.handelUser(); //重新获取列表接口
+            })
+          }else{
+            editUser(this.form).then(() => {
+              this.handelUser(); //重新获取列表接口
+            })
+          }
           this.dialogVisible = false;
           this.$refs.form.resetFields();    //清除表单内容
         }
@@ -153,11 +163,35 @@ export default {
     cancel() {
       this.handleClose();
     },
-    handleEdit(index, row) {
-      console.log(index, row);
+    handleEdit(row) {
+      this.modelType = 1
+      this.dialogVisible = true
+      // 要注意对当前 行数据 进行深拷贝，否则会出错
+      this.form = JSON.parse(JSON.stringify(row))
     },
-    handleDelete(index, row) {
-      console.log(index, row);
+    handleDelete(row) {
+      this.$confirm('确认删除?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        delUser({ id:row.id }).then(() => {
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          });
+          this.handelUser()
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
+      });
+    },
+    handleAdd(){
+      this.modelType = 0
+      this.dialogVisible = true
     },
     handelUser(){  //公用方法
       getUser().then(({data}) => {
