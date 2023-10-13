@@ -15,13 +15,13 @@
         </div>
         <div class="r-content">
             <i class="el-icon-quanping" @click="handleFullScreen"></i>
-            <el-dropdown>
+            <el-dropdown @command="handleClick">
                 <span class="el-dropdown-link">
                     <img class="user" src="../assets/img/pic.jpg" alt="" />
                 </span>
                 <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item>个人中心</el-dropdown-item>
-                    <el-dropdown-item>退出</el-dropdown-item>
+                    <el-dropdown-item command="logout">退出</el-dropdown-item>
 
                 </el-dropdown-menu>
             </el-dropdown>
@@ -33,6 +33,7 @@
 <script>
 import '@/assets/css/iconfont/iconfont.css'  //引入图标
 import { mapState } from 'vuex'
+import Cookie from "js-cookie";
 export default {
     data() {
         return {
@@ -47,6 +48,15 @@ export default {
         },
         handleFullScreen() {  //全屏
             document.documentElement.requestFullscreen()
+        },
+        handleClick(command){
+          if(command === 'logout'){
+            console.log('登出')
+            //清除 cookie 中的 token
+            Cookie.remove('token')
+            //跳转到登录页面
+            this.$router.push({name:'login'})
+          }
         }
     },
     computed:{

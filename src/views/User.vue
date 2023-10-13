@@ -44,10 +44,10 @@
       <!-- inline属性可以让表单域变成行内的表单域   -->
       <el-form :model="searchForm" :inline="true">
         <el-form-item>
-          <el-input v-model="searchForm.name" placeholder="请输入名称" ></el-input>
+          <el-input v-model="searchForm.name" placeholder="请输入名称" @keyup.enter.native="search" ></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="search">查询</el-button>
+          <el-button type="primary" @click="search" >查询</el-button>
           <!-- 新增按钮 -->
           <el-button @click="handleAdd()" type="primary">新增</el-button>
         </el-form-item>

@@ -23,3 +23,7 @@ export const editUser = (data) => {
     return http.post('/user/edit', data)
 }
 
+export const getMenu = (data) => {
+    return http.post('/permission/getMenu',data)
+}
+
