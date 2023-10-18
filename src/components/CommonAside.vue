@@ -76,8 +76,8 @@ export default {
     min-height: 400px;
 }
 
-.el-menu {
-    height: 100vh;
+/deep/.el-menu {
+    height: 100%;
     transition: all .1s;
     border-right: none;
     h3 {
